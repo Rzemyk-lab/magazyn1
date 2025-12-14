@@ -1,5 +1,5 @@
 import streamlit as st
-import os # Import modułu 'os' do sprawdzenia ścieżki pliku
+import os
 
 # --- Konfiguracja Strony Streamlit ---
 st.set_page_config(
@@ -30,7 +30,7 @@ def delete_item(item_to_delete):
     else:
         st.error(f"❌ Błąd: Towar '*{item_to_delete}*' nie znaleziono.")
 
-# --- CSS dla ulepszeń wizualnych ---
+# --- CSS dla ulepszeń wizualnych (bez zmian) ---
 st.markdown("""
 <style>
     .reportview-container .main .block-container{
@@ -81,23 +81,20 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 
-# --- Nagłówek i Obrazek Banerowy (NAPRAWIONA SEKCJA) ---
+# --- Nagłówek i Obrazek Banerowy (bez zmian) ---
 st.title("📦 Smart Magazyn App")
 st.markdown("### Intuicyjne zarządzanie zapasami na wyciągnięcie ręki!")
 
 image_path = "warehouse_banner.png"
 
-# Poniższy blok rozwiązuje błąd MediaFileStorageError
 if os.path.exists(image_path):
-    # Wyświetla obraz tylko, jeśli plik istnieje w katalogu
     st.image(image_path, caption="Twoje centrum zarządzania zapasami", use_column_width=True)
 else:
-    # Wyświetla ostrzeżenie zamiast awarii aplikacji
     st.warning(f"⚠️ Ostrzeżenie: Plik '{image_path}' (baner) nie został znaleziony w repozytorium. Aplikacja działa poprawnie, ale bez obrazka.")
     st.markdown("<p style='text-align: center; color: gray;'><i>Wizualizacja magazynu</i></p>", unsafe_allow_html=True)
 
 
-# 1. Sekcja Dodawania Towaru
+# 1. Sekcja Dodawania Towaru (bez zmian)
 st.header("➕ Dodaj Nowy Towar")
 st.info("Wpisz nazwę towaru i dodaj go do swojego magazynu.")
 with st.form("add_form", clear_on_submit=True):
@@ -108,7 +105,7 @@ with st.form("add_form", clear_on_submit=True):
         add_item(new_item_input.strip().title())
 
 
-# 2. Sekcja Wyświetlania Magazynu
+# 2. Sekcja Wyświetlania Magazynu (bez zmian)
 st.header("📊 Aktualny Stan Magazynu")
 
 if st.session_state.inventory:
@@ -120,7 +117,7 @@ if st.session_state.inventory:
         hide_index=True
     )
 
-    # 3. Sekcja Usuwania Towaru
+    # 3. Sekcja Usuwania Towaru (zmiana st.experimental_rerun na st.rerun)
     st.header("🗑️ Usuń Towar")
     st.info("Wybierz towar z listy, który chcesz usunąć.")
     item_to_remove = st.selectbox(
@@ -131,8 +128,8 @@ if st.session_state.inventory:
 
     if st.button("🔴 Usuń Wybrany Towar", key="delete_button"):
         delete_item(item_to_remove)
-        # st.experimental_rerun() jest używane, aby natychmiast odświeżyć interfejs po usunięciu
-        st.experimental_rerun() 
+        # NAPRAWIONA LINIA: st.experimental_rerun() zmienione na st.rerun()
+        st.rerun() 
         
 else:
     st.info("Twój magazyn jest aktualnie pusty. Czas coś dodać! 🚀")
